@@ -23,6 +23,16 @@ const products = [
     }
 ];
 
+const allowCrossDomain = (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*'); 
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type'); 
+    next();
+};
+
+// Use the middleware function for all routes
+app.use(allowCrossDomain);
+
 db.serialize(() => {
     db.run("CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, price REAL NOT NULL, image_one TEXT NOT NULL, image_two TEXT, image_three TEXT)");
 
@@ -38,7 +48,13 @@ db.serialize(() => {
 });
 
 app.get('/products', (req, res) => {
-    res.json(products);
+    db.all("SELECT * FROM products", (err, rows) => {
+        if (err) {
+            res.status(500).json({ error: 'Internal server error' });
+        } else {
+            res.json(rows);
+        }
+    });
 });
 
 app.listen(port, () => {
