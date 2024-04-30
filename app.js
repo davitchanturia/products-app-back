@@ -24,10 +24,12 @@ const products = [
 ];
 
 db.serialize(() => {
-    db.run("CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY, name TEXT NOT NULL, price REAL NOT NULL, image_one TEXT NOT NULL, image_two TEXT, image_three TEXT)");
+    db.run("CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY, name TEXT UNIQUE NOT NULL, price REAL NOT NULL, image_one TEXT NOT NULL, image_two TEXT, image_three TEXT)");
 
-    const stmt = db.prepare("INSERT INTO products (name, price, image_one, image_two, image_three) VALUES (?, ?, ?, ?, ?)");
-    
+    db.run("DELETE FROM products");
+
+    const stmt = db.prepare("INSERT INTO products (name, price, image_one, image_two, image_three) VALUES (?, ?, ?, ?, ?)");    
+
     products.forEach((product) => {
         stmt.run(product.name, product.price, product.image_one, product.image_two, product.image_three);
     });
