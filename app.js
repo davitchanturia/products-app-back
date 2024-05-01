@@ -47,7 +47,6 @@ app.get('/products', (req, res) => {
             // Query the database to fetch paginated products
             db.all(`SELECT * FROM products LIMIT ? OFFSET ?`, [pageSize, offset], (err, rows) => {
                 if (err) {
-                    console.error(err.message);
                     res.status(500).json({ error: 'Internal server error' });
                 } else {
                     res.json({ totalPages, currentPage: page, pageSize, products: rows });
