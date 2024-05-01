@@ -49,7 +49,11 @@ cd products-app-back
 ```sh
 npm install
 ```
-5\. Run the command to start the development server
+5\. create sqlite database file in root
+```sh
+touch database.sqlite
+```
+6\. Run the command to start the development server
 ```sh
 node app.js
 ```
